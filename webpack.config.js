@@ -1,7 +1,7 @@
 var HtmlWebpackPlugin = require('html-webpack-plugin')
 
 module.exports = {
-  entry: './index',
+  entry: [ 'babel/polyfill', './index' ],
   output: {
     path: __dirname + '/dist',
     filename: 'main.js'
@@ -14,7 +14,7 @@ module.exports = {
   plugins: [
     new HtmlWebpackPlugin({
       template: 'node_modules/html-webpack-template/index.html',
-      title: 'React!',
+      title: 'Demo Self Registration',
       devServer: 'http://localhost:3000',
       appMountId: 'app'
     })

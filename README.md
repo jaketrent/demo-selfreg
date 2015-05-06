@@ -1,27 +1,15 @@
-# react-config
+# demo-selfreg
 
-A big of config that should allow you to quickly start hacking on some React.
+A simple self registration demo for some react stuff:
 
-Should allow:
+- Component composition
+- Props passing
+- Callbacks
+- State
+- Stores
 
-- ES6/7 via babel
-- JSX via babel
-- CJS modules via webpack
-- Auto reload via webpack-dev-server
+Some interesting bonuses:
 
-## Installation
-
-Fork and clone or...
-
-```
-git clone https://github.com/jaketrent/react-config
-```
-
-## Start hacking with React
-
-```
-cd react-config
-npm start
-open localhost:3000
-vim index.js
-```
+- [es6 classes for react](https://facebook.github.io/react/blog/2015/01/27/react-v0.13.0-beta-1.html)
+- [@autobind annotation](https://www.npmjs.com/package/autobind-decorator)
+- [Node events](https://nodejs.org/api/events.html)

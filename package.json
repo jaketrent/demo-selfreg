@@ -1,5 +1,5 @@
 {
-  "name": "react-config",
+  "name": "demo-selfreg",
   "version": "1.0.1",
   "description": "Config for basic react work in es6 and jsx",
   "main": "index.js",
@@ -18,10 +18,13 @@
   "author": "jaketrent",
   "license": "MIT",
   "devDependencies": {
+    "autobind-decorator": "^1.1.0",
+    "babel": "^5.2.16",
     "babel-core": "^5.1.11",
     "babel-loader": "^5.0.0",
     "html-webpack-plugin": "^1.3.0",
     "html-webpack-template": "^1.2.0",
+    "lodash-node": "^3.8.0",
     "react": "^0.13.2",
     "webpack": "^1.8.9",
     "webpack-dev-server": "^1.8.2"

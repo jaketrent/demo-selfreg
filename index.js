@@ -1,5 +1,5 @@
-import assign from 'lodash-node/modern/object/assign'
-import clone from 'lodash-node/modern/lang/clone'
+import assign from 'lodash/object/assign'
+import clone from 'lodash/lang/clone'
 import autobind from 'autobind-decorator'
 import React from 'react'
 

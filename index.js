@@ -1,57 +1,21 @@
 import assign from 'lodash-node/modern/object/assign'
 import clone from 'lodash-node/modern/lang/clone'
 import autobind from 'autobind-decorator'
-import EventEmitter from 'events'
 import React from 'react'
-
-const UserStore = assign({}, EventEmitter.prototype, {
-  isSet() {
-    return !!this._user
-  },
-  getUser() {
-    return clone(this._user)
-  },
-  setUser(user) {
-    this._user = user
-    this.emitChange()
-  },
-  emitChange() {
-    this.emit('change', arguments)
-  },
-  addChangeListener(cb) {
-    this.on('change', cb)
-  },
-  removeChangeListener(cb) {
-    this.removeListener('change', cb)
-  }
-})
 
 @autobind
 class App extends React.Component {
   constructor() {
     super()
-    this.state = this.getStateFromStores()
-  }
-  componentDidMount() {
-    UserStore.addChangeListener(this._onChange)
-  }
-  componentWillUnmount() {
-    UserStore.removeChangeListener(this._onChange)
-  }
-  _onChange() {
-    this.setState(this.getStateFromStores)
-  }
-  getStateFromStores() {
-    return {
-      user: UserStore.getUser(),
-      isUserSet: UserStore.isSet()
-    }
+    this.state = {}
   }
   handleRegistrationFormSubmit(user) {
-    UserStore.setUser(user)
+    this.setState({
+      user: user
+    })
   }
   render() {
-    return this.state.isUserSet ?
+    return !!this.state.user ?
       <UserDisplay user={this.state.user} /> :
       <RegistrationForm onSubmit={this.handleRegistrationFormSubmit} />
   }

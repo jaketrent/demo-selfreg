@@ -12,7 +12,6 @@ const UserStore = assign({}, EventEmitter.prototype, {
     return clone(this._user)
   },
   setUser(user) {
-    console.log('set user', user)
     this._user = user
     this.emitChange()
   },

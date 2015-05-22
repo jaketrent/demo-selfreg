@@ -2,20 +2,55 @@ import assign from 'lodash/object/assign'
 import clone from 'lodash/lang/clone'
 import autobind from 'autobind-decorator'
 import React from 'react'
+import EventEmitter from 'events'
+
+var registrationStore = assign({}, EventEmitter.prototype, {
+  listen(listener) {
+    this.addListener('change', listener)
+  },
+  unlisten(listener) {
+    this.removeListener('change', listener)
+  },
+  hasRegistration() {
+    return !!this._user
+  },
+  setRegistration(user) {
+    this._user = user
+    this.emitChange()
+  },
+  getRegistration() {
+    return clone(this._user)
+  },
+  emitChange() {
+    this.emit('change', arguments)
+  }
+})
 
 @autobind
 class App extends React.Component {
   constructor() {
     super()
-    this.state = {}
+    this.state = this.getStateFromStores()
+  }
+  componentWillMount() {
+    registrationStore.listen(this.onStoreChange)
+  }
+  componentWillUnmount() {
+    registrationStore.unlisten(this.onStoreChange)
+  }
+  onStoreChange() {
+    this.setState(this.getStateFromStores())
+  }
+  getStateFromStores() {
+    return {
+      user: registrationStore.getRegistration()
+    }
   }
   handleRegistrationFormSubmit(user) {
-    this.setState({
-      user: user
-    })
+    registrationStore.setRegistration(user)
   }
   render() {
-    return !!this.state.user ?
+    return registrationStore.hasRegistration() ?
       <UserDisplay user={this.state.user} /> :
       <RegistrationForm onSubmit={this.handleRegistrationFormSubmit} />
   }

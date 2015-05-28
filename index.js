@@ -66,11 +66,12 @@ class App extends React.Component {
   }
   getStateFromStores() {
     return {
-      user: registrationStore.getRegistration()
+      user: registrationStore.getRegistration(),
+      hasRegistration: registrationStore.hasRegistration()
     }
   }
   render() {
-    return registrationStore.hasRegistration() ?
+    return this.state.hasRegistration ?
       <UserDisplay user={this.state.user} /> :
       <RegistrationForm />
   }

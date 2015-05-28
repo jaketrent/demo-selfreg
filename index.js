@@ -26,6 +26,12 @@ var registrationStore = assign({}, EventEmitter.prototype, {
   }
 })
 
+var actions = {
+  createUser(user) {
+    registrationStore.setRegistration(user)
+  }
+}
+
 @autobind
 class App extends React.Component {
   constructor() {
@@ -46,13 +52,10 @@ class App extends React.Component {
       user: registrationStore.getRegistration()
     }
   }
-  handleRegistrationFormSubmit(user) {
-    registrationStore.setRegistration(user)
-  }
   render() {
     return registrationStore.hasRegistration() ?
       <UserDisplay user={this.state.user} /> :
-      <RegistrationForm onSubmit={this.handleRegistrationFormSubmit} />
+      <RegistrationForm />
   }
 }
 
@@ -70,12 +73,9 @@ class UserDisplay extends React.Component {
 
 @autobind
 class RegistrationForm extends React.Component {
-  constructor() {
-    super()
-  }
   handleSubmit(evt) {
     evt.preventDefault()
-    this.props.onSubmit(this.state)
+    actions.createUser(this.state)
   }
   handleFieldChange(name, value) {
     var newState = {}

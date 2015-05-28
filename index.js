@@ -2,7 +2,13 @@ import assign from 'lodash/object/assign'
 import clone from 'lodash/lang/clone'
 import autobind from 'autobind-decorator'
 import React from 'react'
+import keyMirror from 'react/lib/keyMirror'
 import EventEmitter from 'events'
+import { Dispatcher } from 'flux'
+
+var appDispatcher = new Dispatcher()
+
+var constants = keyMirror({ CREATE_USER: null })
 
 var registrationStore = assign({}, EventEmitter.prototype, {
   listen(listener) {
@@ -25,10 +31,21 @@ var registrationStore = assign({}, EventEmitter.prototype, {
     this.emit('change', arguments)
   }
 })
+registrationStore.dispatchToken = appDispatcher.register(function (payload) {
+  switch(payload.actionType) {
+    case constants.CREATE_USER:
+      this._user = payload.user
+      this.emitChange()
+      break
+  }
+}.bind(registrationStore))
 
 var actions = {
   createUser(user) {
-    registrationStore.setRegistration(user)
+    appDispatcher.dispatch({
+      actionType: constants.CREATE_USER,
+      user
+    })
   }
 }
 

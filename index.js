@@ -113,8 +113,8 @@ class RegistrationForm extends React.Component {
 
 @autobind
 class Field extends React.Component {
-  constructor() {
-    super()
+  static defaultProps = {
+    type: 'text'
   }
   handleChange(evt) {
     this.props.onChange(evt.currentTarget.name, evt.currentTarget.value)
@@ -129,9 +129,6 @@ class Field extends React.Component {
       </div>
     )
   }
-}
-Field.defaultProps = {
-  type: "text"
 }
 
 React.render(<App />, document.getElementById('app'))

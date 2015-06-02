@@ -1,4 +1,6 @@
 import assign from 'lodash/object/assign'
+import omit from 'lodash/object/omit'
+import axios from 'axios'
 import clone from 'lodash/lang/clone'
 import autobind from 'autobind-decorator'
 import React from 'react'
@@ -8,7 +10,50 @@ import { Dispatcher } from 'flux'
 
 var appDispatcher = new Dispatcher()
 
-var constants = keyMirror({ CREATE_USER: null })
+var constants = keyMirror({
+  CREATE_USER: null,
+  CREATE_USER_SUCCESS: null
+})
+
+var actions = {
+  createUser(user) {
+    apiHelpers.createUser(user)
+    appDispatcher.dispatch({
+      actionType: constants.CREATE_USER,
+      user
+    })
+  },
+  createUserSuccess(user) {
+    appDispatcher.dispatch({
+      actionType: constants.CREATE_USER_SUCCESS,
+      user
+    })
+  }
+}
+
+var apiHelpers = {
+  async createUser(user) {
+    function serialize(rawUser) {
+      return {
+        data: assign({}, rawUser, {
+          type: 'users'
+        })
+      }
+    }
+
+    function deserialize(apiUser) {
+      return omit(apiUser.data, 'type', 'links')
+    }
+
+    var res = await axios({
+      method: 'post',
+      url: 'http://demo-users-api.herokuapp.com/api/v1/users',
+      headers: { 'Content-Type': 'application/vnd.api+json' },
+      data: serialize(user)
+    })
+    actions.createUserSuccess(deserialize(res.data))
+  }
+}
 
 var registrationStore = assign({}, EventEmitter.prototype, {
   listen(listener) {
@@ -33,21 +78,13 @@ var registrationStore = assign({}, EventEmitter.prototype, {
 })
 registrationStore.dispatchToken = appDispatcher.register(function (payload) {
   switch(payload.actionType) {
-    case constants.CREATE_USER:
+    case constants.CREATE_USER_SUCCESS:
       this._user = payload.user
       this.emitChange()
       break
   }
 }.bind(registrationStore))
 
-var actions = {
-  createUser(user) {
-    appDispatcher.dispatch({
-      actionType: constants.CREATE_USER,
-      user
-    })
-  }
-}
 
 @autobind
 class App extends React.Component {
